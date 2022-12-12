@@ -32,14 +32,11 @@
               <th scope="row">1</th>
               <td>{{$pr->name }}</td>
               <td>{{$pr->description}}</td>
-              <td><img src="{{ Storage::url($pr->image) }}"></td>
+              <td><img src="{{ Storage::url($pr->image) }}" class="w-50"></td>
               <td>
-                <button type="button" class="btn btn-primary">Edit</button>
-                <form action="/data" method="post" class="d-inline">
-                  @method('delete')
-                  @csrf
-                  <button type="button" class="btn btn-danger" onclick="return confirm('are you sure?')">Delete</button>
-                </form>
+                <a href="/edit/{{$pr->id}}" type="button" class="btn btn-primary">Edit</a>
+                <a href="{{ route ('delete',[ "id" => $pr->id]) }}" type="button" class="btn btn-danger" >Delete</a>
+              
               </td>
             </tr>
             @endforeach
