@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     public function index () {
-        $product = product::query()
+        $product = product::query() //nagasih tau laravel klo kita mau pake query
                     ->get();
             return view('data', [
-                'product' => $product
+                'product' => $product //
             ]);
     }
     public function create () {
@@ -24,16 +24,53 @@ class ProductController extends Controller
             'image'=> $request->file('image')->store('imsges', 'public')
 
         ];
-        
+        // dd($created);
         product::query()->create($created);
-        return redirect('data');
+        return redirect('/');
     }
     public function edit ($id){
         $product = product::findOrFail($id);
-        return view ('edit', compact('product'));
+        return view ('/edit', compact('product'));
     }  
     public function update(Request $request, $id)
     {
+        $product = product::findOrfail($id);
+        // $product->update($request->all());
+        
+        
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $image = $request->file('image');
+        if (isset($image)){ //pengecekan ada tidaknya gambar, jika ada maka dilanjut ke codingan dibawah ini, jika tidak uplod loncat ke save. tujuan kodingan if ini biar kalo edit tanpa uplod tetap bisa diproses tanpa eror
+            $product->image= $request->file('image')->store('imsges', 'public');
+        }
+       
+        // $product->image = $request->image;
+        $product->save();
+
+        
+        // if ($request ->image !=null)
+        // {
+        //     $img = $request->file('image');
+        //     $filename = time() ."_". $img->getClientOrginalName();
+        //     $img->move('img', $filename);
+        //     product::where('id', $product->id)->update(
+        //     [
+        //         "name" => $request->name,
+        //         "description" => $request->description,
+        //         "image" => $filename,
+        //     ]);
+        // } else
+        // {
+        //     product::where('id', $product->id)->update(
+        //         [
+        //             "name" => $request->name,
+        //             "description" => $request->description,
+                   
+        //         ]);
+        // }
+
+
         //  () 
         // [
         //     'name' => $request->input('name'),
